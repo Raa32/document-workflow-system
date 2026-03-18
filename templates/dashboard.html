@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="card">
+  <h2 style="margin-top:0">Document Dashboard</h2>
+  <div style="display:flex; gap:16px; margin-bottom:24px;">
+    <div class="card" style="flex:1; text-align:center; margin:0; padding:16px;">
+      <div style="font-size:28px; font-weight:bold; color:#1a56db;">{{ counts['Submitted'] }}</div>
+      <div style="font-size:13px; color:#888;">Submitted</div>
+    </div>
+    <div class="card" style="flex:1; text-align:center; margin:0; padding:16px;">
+      <div style="font-size:28px; font-weight:bold; color:#856404;">{{ counts['Under Review'] }}</div>
+      <div style="font-size:13px; color:#888;">Under Review</div>
+    </div>
+    <div class="card" style="flex:1; text-align:center; margin:0; padding:16px;">
+      <div style="font-size:28px; font-weight:bold; color:#155724;">{{ counts['Approved'] }}</div>
+      <div style="font-size:13px; color:#888;">Approved</div>
+    </div>
+    <div class="card" style="flex:1; text-align:center; margin:0; padding:16px;">
+      <div style="font-size:28px; font-weight:bold; color:#721c24;">{{ counts['Rejected'] }}</div>
+      <div style="font-size:13px; color:#888;">Rejected</div>
+    </div>
+  </div>
+
+  <table>
+    <thead>
+      <tr><th>File</th><th>Uploaded By</th><th>Status</th><th>Submitted</th><th></th></tr>
+    </thead>
+    <tbody>
+      {% for doc in documents %}
+      <tr>
+        <td>{{ doc.original_name }}</td>
+        <td>{{ doc.uploaded_by }}</td>
+        <td>
+          {% if doc.status == 'Submitted' %}<span class="badge badge-submitted">Submitted</span>
+          {% elif doc.status == 'Under Review' %}<span class="badge badge-review">Under Review</span>
+          {% elif doc.status == 'Approved' %}<span class="badge badge-approved">Approved</span>
+          {% else %}<span class="badge badge-rejected">Rejected</span>{% endif %}
+        </td>
+        <td>{{ doc.created_at.strftime('%d %b %Y') if doc.created_at else '' }}</td>
+        <td><a href="/documents/{{ doc.id }}">View</a></td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

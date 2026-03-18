@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="card">
+  <h2 style="margin-top:0">{{ document.original_name }}</h2>
+  <p style="color:#888; font-size:13px;">Uploaded by {{ document.uploaded_by }}</p>
+
+  <p>
+    Status:
+    {% if document.status == 'Submitted' %}<span class="badge badge-submitted">Submitted</span>
+    {% elif document.status == 'Under Review' %}<span class="badge badge-review">Under Review</span>
+    {% elif document.status == 'Approved' %}<span class="badge badge-approved">Approved</span>
+    {% else %}<span class="badge badge-rejected">Rejected</span>{% endif %}
+  </p>
+
+  {% if document.status == 'Submitted' %}
+  <div class="card" style="background:#f8f9fa;">
+    <strong>Move to Review</strong>
+    <form action="/workflow/update/{{ document.id }}" method="post" style="margin-top:12px;">
+      <input type="hidden" name="new_status" value="Under Review">
+      <div style="margin-bottom:10px;"><label>Reviewer Name</label><input type="text" name="reviewed_by" required></div>
+      <div style="margin-bottom:10px;"><label>Comment</label><textarea name="comment" rows="2"></textarea></div>
+      <button class="btn btn-primary" type="submit">Start Review</button>
+    </form>
+  </div>
+  {% elif document.status == 'Under Review' %}
+  <div style="display:flex; gap:16px;">
+    <div class="card" style="flex:1; background:#f0fff4;">
+      <strong>Approve</strong>
+      <form action="/workflow/update/{{ document.id }}" method="post" style="margin-top:12px;">
+        <input type="hidden" name="new_status" value="Approved">
+        <div style="margin-bottom:10px;"><label>Approver Name</label><input type="text" name="reviewed_by" required></div>
+        <div style="margin-bottom:10px;"><label>Comment</label><textarea name="comment" rows="2"></textarea></div>
+        <button class="btn btn-success" type="submit">Approve</button>
+      </form>
+    </div>
+    <div class="card" style="flex:1; background:#fff5f5;">
+      <strong>Reject</strong>
+      <form action="/workflow/update/{{ document.id }}" method="post" style="margin-top:12px;">
+        <input type="hidden" name="new_status" value="Rejected">
+        <div style="margin-bottom:10px;"><label>Reviewer Name</label><input type="text" name="reviewed_by" required></div>
+        <div style="margin-bottom:10px;"><label>Reason</label><textarea name="comment" rows="2"></textarea></div>
+        <button class="btn btn-danger" type="submit">Reject</button>
+      </form>
+    </div>
+  </div>
+  {% endif %}
+</div>
+
+<div class="card">
+  <h3 style="margin-top:0">Workflow History</h3>
+  <table>
+    <thead><tr><th>Action</th><th>By</th><th>Comment</th><th>Time</th></tr></thead>
+    <tbody>
+      {% for event in events %}
+      <tr>
+        <td><strong>{{ event.action }}</strong></td>
+        <td>{{ event.performed_by }}</td>
+        <td>{{ event.comment or '—' }}</td>
+        <td style="color:#888; font-size:12px;">{{ event.timestamp.strftime('%d %b %Y %H:%M') if event.timestamp else '' }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>DocFlow – Document Workflow System</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 0; background: #f5f7fa; color: #333; }
+    nav { background: #1F3864; padding: 14px 30px; color: white; display: flex; align-items: center; gap: 30px; }
+    nav a { color: white; text-decoration: none; font-size: 14px; }
+    nav a:hover { text-decoration: underline; }
+    .container { max-width: 960px; margin: 30px auto; padding: 0 20px; }
+    .card { background: white; border-radius: 8px; padding: 24px; margin-bottom: 20px; box-shadow: 0 1px 4px rgba(0,0,0,0.08); }
+    .badge { display: inline-block; padding: 3px 10px; border-radius: 12px; font-size: 12px; font-weight: bold; }
+    .badge-submitted { background: #e8f0fe; color: #1a56db; }
+    .badge-review { background: #fff3cd; color: #856404; }
+    .badge-approved { background: #d4edda; color: #155724; }
+    .badge-rejected { background: #f8d7da; color: #721c24; }
+    .btn { padding: 8px 18px; border: none; border-radius: 5px; cursor: pointer; font-size: 14px; }
+    .btn-primary { background: #1F3864; color: white; }
+    .btn-success { background: #28a745; color: white; }
+    .btn-danger { background: #dc3545; color: white; }
+    input, textarea, select { width: 100%; padding: 8px; margin-top: 5px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
+    label { font-size: 13px; font-weight: bold; color: #555; }
+    table { width: 100%; border-collapse: collapse; }
+    th, td { text-align: left; padding: 10px 12px; border-bottom: 1px solid #eee; font-size: 14px; }
+    th { background: #f0f4f8; color: #444; }
+    a { color: #1F3864; }
+  </style>
+</head>
+<body>
+  <nav>
+    <strong style="font-size:16px;">DocFlow</strong>
+    <a href="/dashboard">Dashboard</a>
+    <a href="/documents/upload">Upload Document</a>
+  </nav>
+  <div class="container">
+    {% block content %}{% endblock %}
+  </div>
+</body>
+</html>
